@@ -6,6 +6,13 @@ const parentCategorySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    games:[
+      {
+        type:mongoose.Schema.Types.ObjectId,
+        required:true,
+        ref:"Game"
+      }
+    ]
   },
   {
     timestamps: true,
