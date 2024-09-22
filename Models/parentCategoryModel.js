@@ -5,6 +5,7 @@ const parentCategorySchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
+      unique:true
     },
     games:[
       {
@@ -19,9 +20,9 @@ const parentCategorySchema = new mongoose.Schema(
   }
 );
 
-const parentCategoryModel = mongoose.model(
+const parentCategory = mongoose.model(
   "ParentCategory",
   parentCategorySchema
 );
 
-module.exports = parentCategoryModel;
+module.exports = parentCategory;
