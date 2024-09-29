@@ -1,12 +1,13 @@
 module.exports = {
-    okResponse: (res, status, data, message) => {
-        let response = {
+    okResponse: (res, status, data, message, token = null) => {
+        const response = {
             success: true,
             message,
-            code,
-            data
-        }
-        return res.status(response.status).code(response);
+            status,
+            data,
+            token,
+        };
+        return res.status(status).json(response);
     },
     handleError: (res, status, data, message) => {
         let response = {

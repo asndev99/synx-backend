@@ -1,34 +1,36 @@
-const parentCategory=require("../Models/parentCategoryModel");
-const {verifyAdmin }=require("../Middlewares/auth.middleware");
-const globalErrorMiddleware = require("../Middlewares/globalError.middleware");
+const parentCategory = require("../Models/parentCategoryModel");
 const { BadRequestError } = require("../customErrors");
-const { okResponse, handleError } = require("../Utils/handlers.utils");
-const  Game =require("../Models/gamesModel")
-const addCategory=async(req,res)=>{
+const { okResponse } = require("../Utils/handlers.utils");
+const addCategory = async (req, res, next) => {
     try {
-        const { name}=req.body;
-        let category=await parentCategory.findOne({name})
-        if(category)  throw new BadRequestError("category name is already present") 
-        category=new category({
+        const { name } = req.body;
+        let newParentcategory = new parentCategory({
             name
         })
-        return okResponse(200,'parentCategory is created')
+        await newParentcategory.save();
+        okResponse(res, 200, newParentcategory, 'Parent Category Added Successfull');
     } catch (error) {
-         handleError(500,"parent category catch error")
+        if (error.code == 11000) {
+            const newError = new BadRequestError("Parent Category With this name already exists");
+            return next(newError);
+        }
+        next(error);
+    }
+}
+
+const getAllParentCategories = async (req, res, next) => {
+    try {
+        const categories = await parentCategory.find();
+        okResponse(res, 200, categories, "All Parent Categories Fetched");
+    }
+    catch (error) {
+        next(error);
     }
 }
 
 
-// const addgamecaateegory=async(req,res)=>{
-//     try {
-//         const {name,imageUrl,parentCategoryId}=req.body
-         
-//     } catch (error) {
-        
-//     }
-// }
 
-
-module.exports={
-    addCategory
+module.exports = {
+    addCategory,
+    getAllParentCategories
 }
