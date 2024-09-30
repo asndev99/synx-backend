@@ -10,7 +10,6 @@ const verifyAdmin = async (req, res, next) => {
             throw new UnauthorizedError("Missing Authorization header with Bearer token");
         }
         const token = authHeader.split("Bearer ")[1];
-        console.log("token",token)
         if (!token) {
             throw new UnauthorizedError("Please Login To Continue");
         }
@@ -24,20 +23,20 @@ const verifyAdmin = async (req, res, next) => {
         next();
     } catch (error) {
         if (error instanceof jwt.JsonWebTokenError) {
-            throw new UnauthorizedError("Please Login To Continue");
+            console.error("JWT Error:", error.message);
+            throw new UnauthorizedError("Invalid token, please login again");
         } else {
             console.error("Error in verifying token", error);
-            next(error);
         }
+        next(error);
     }
 };
 
 const generateToken = (payload) => {
     try {
-        return jwt.sign(payload, ACCESS_SECRET);
+        return jwt.sign(payload, ACCESS_SECRET, { expiresIn: '1d' });
     } catch (error) {
         console.error("Error generating token", error);
-        // Handle error appropriately (consider throwing or returning an error message)
         throw new Error("Error generating token");
     }
 };

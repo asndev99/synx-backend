@@ -6,10 +6,12 @@ const gameSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    imageUrl: {
-      type: String,
-      required: true,
-    },
+    imageUrls: [
+      {
+        type: String,
+        required: true,
+      },
+    ],
     parentCategoryId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,

@@ -18,19 +18,51 @@ const addCategory = async (req, res, next) => {
     }
 }
 
-const getAllParentCategories = async (req, res, next) => {
+const getAllParentCategoriesWithGamesCount = async (req, res, next) => {
     try {
-        const categories = await parentCategory.find();
-        okResponse(res, 200, categories, "All Parent Categories Fetched");
-    }
-    catch (error) {
+        const categories = await parentCategory.aggregate([
+            {
+                $lookup: {
+                    from: "games",
+                    localField: "games",
+                    foreignField: "_id",
+                    as: "gamesInfo"
+                }
+            },
+            {
+                $addFields: {
+                    gamesCount: { $size: "$gamesInfo" }
+                }
+            },
+            {
+                $project: {
+                    name: 1,
+                    gamesCount: 1
+                }
+            }
+        ]);
+
+        okResponse(res, 200, categories, "All Parent Categories with Game Count Fetched");
+    } catch (error) {
         next(error);
     }
+};
+
+const getAllCategories = async(req,res,next) => {
+    try{
+        const categories =await parentCategory.find({});
+        okResponse(res,200,categories,"All Categories Fetched");
+     }
+     catch(error){
+        next(error);
+     }
 }
+
 
 
 
 module.exports = {
     addCategory,
-    getAllParentCategories
+    getAllCategories,
+    getAllParentCategoriesWithGamesCount
 }
