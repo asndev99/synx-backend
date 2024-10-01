@@ -19,6 +19,7 @@ const login = async (req, res, next) => {
         const accesstoken = generateToken({ id: user._id, role: "ADMIN" });
         okResponse(res, 200, user, "Successfully logged in", accesstoken);
     } catch (error) {
+        console.log(error);
         next(error);
     }
 };

@@ -8,17 +8,17 @@ const listingSchema = new mongoose.Schema(
       unique: true,
     },
     Price: {
-      type: Float,
+      type: Number,
       required: true,
     },
     decription: {
       type: String,
       required: true,
     },
-    deliveryTime:{
-        type:String,
-        required:true
-        
+    deliveryTime: {
+      type: String,
+      required: true
+
     }
   },
   {

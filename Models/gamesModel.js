@@ -23,5 +23,7 @@ const gameSchema = new mongoose.Schema(
   }
 );
 
+gameSchema.index({ name: 1, parentCategoryId: 1 }, { unique: true });
+
 const Game = mongoose.model("Game", gameSchema);
 module.exports = Game;
