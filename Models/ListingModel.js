@@ -7,11 +7,11 @@ const listingSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    Price: {
+    price: {
       type: Number,
       required: true,
     },
-    decription: {
+    description: {
       type: String,
       required: true,
     },

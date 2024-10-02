@@ -6,10 +6,11 @@ const User = require("../Models/userModel");
 const verifyAdmin = async (req, res, next) => {
     try {
         const authHeader = req.headers.authorization;
-        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        if (!authHeader || !authHeader.startsWith("Bearer")) {
             throw new UnauthorizedError("Missing Authorization header with Bearer token");
         }
         const token = authHeader.split("Bearer ")[1];
+        console.log("token",token)
         if (!token) {
             throw new UnauthorizedError("Please Login To Continue");
         }

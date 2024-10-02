@@ -1,6 +1,7 @@
 const parentCategory = require("../Models/parentCategoryModel");
 const { BadRequestError } = require("../customErrors");
 const { okResponse } = require("../Utils/handlers.utils");
+
 const addCategory = async (req, res, next) => {
     try {
         const { name } = req.body;
