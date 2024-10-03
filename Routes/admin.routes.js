@@ -15,6 +15,6 @@ adminRouter.post("/item/create-game",verifyAdmin,upload.single('file'),createGam
 adminRouter.post("/topup/create-game",verifyAdmin,upload.single('file'),createGameInTopUp)
 adminRouter.post("/create-list" ,verifyAdmin,addListing)
 adminRouter.get("/get-list",verifyAdmin,getAllListing)
-
+adminRouter.get("/get-games",verifyAdmin,accountController.getAllGame)
 
 module.exports = adminRouter;
