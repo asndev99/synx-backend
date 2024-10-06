@@ -7,14 +7,13 @@ const globalErrorMiddleware = require("./Middlewares/globalError.middleware");
 app.use(reqResInspector());
 app.use(express.json());
 app.use(cors({
-    origin: "http://localhost:3000",  // Your frontend URL
-    methods: ["GET","HEAD","PUT","PATCH","POST","DELETE","OPTIONS"],
-    allowedHeaders: "Authorization, Content-Type", // Include necessary headers
-    credentials: true,  // Allow credentials (cookies, authorization headers, etc.)
-  }));
-  
-  // Preflight requests handler
-  app.options('*', cors()); 
+  origin: "http://localhost:3000",
+  methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
+  allowedHeaders: "Authorization, Content-Type",
+  credentials: true,
+}));
+
+app.options('*', cors());
 app.use("/api/v1", rootRouter);
 app.use(globalErrorMiddleware)
 module.exports = app;

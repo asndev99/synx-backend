@@ -17,6 +17,13 @@ const gameSchema = new mongoose.Schema(
       required: true,
       ref: "ParentCategory",
     },
+    listings:[
+      {
+        type:mongoose.Schema.Types.ObjectId,
+        required:true,
+        ref:"Game"
+      }
+    ]
   },
   {
     timestamps: true,

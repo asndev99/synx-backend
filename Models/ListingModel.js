@@ -18,7 +18,10 @@ const listingSchema = new mongoose.Schema(
     deliveryTime: {
       type: String,
       required: true
-
+    },
+    gameId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true
     }
   },
   {

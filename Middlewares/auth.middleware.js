@@ -10,7 +10,6 @@ const verifyAdmin = async (req, res, next) => {
             throw new UnauthorizedError("Missing Authorization header with Bearer token");
         }
         const token = authHeader.split("Bearer ")[1];
-        console.log("token",token)
         if (!token) {
             throw new UnauthorizedError("Please Login To Continue");
         }

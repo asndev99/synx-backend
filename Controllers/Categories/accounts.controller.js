@@ -2,6 +2,7 @@ const Game = require("../../Models/gamesModel");
 const cloudinary = require("../../Configs/cloudinary");
 const { handleError, okResponse } = require("../../Utils/handlers.utils");
 const { BadRequestError } = require("../../customErrors");
+const parentCategory = require("../../Models/parentCategoryModel");
 
 const createGameInAccount = async (req, res, next) => {
   try {
@@ -25,6 +26,10 @@ const createGameInAccount = async (req, res, next) => {
     });
 
     await game.save();
+    await parentCategory.findByIdAndUpdate(
+      req.body.parentCategoryId,
+      { $push: { games: game._id } }
+    );
 
     res.status(201).json({ message: "Game created successfully", game });
   } catch (error) {
@@ -38,7 +43,9 @@ const createGameInAccount = async (req, res, next) => {
 
 const getAllGame = async (req, res, next) => {
   try {
-    const game = await Game.find({});
+    console.log("HIT");
+    const {id} = req.params;
+    const game = await Game.find({parentCategoryId:id});
     okResponse(res, 200, game, "All games fetch Successsfully");
   } catch (error) {
     next(error);

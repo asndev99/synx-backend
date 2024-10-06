@@ -1,41 +1,52 @@
-const cloudinary =require("../../Configs/cloudinary")
-const Game=require("../../Models/gamesModel")
-const { handleError } = require("../../Utils/handlers.utils")
+const cloudinary = require("../../Configs/cloudinary")
+const Game = require("../../Models/gamesModel")
+const parentCategory = require("../../Models/parentCategoryModel")
+const { handleError, okResponse } = require("../../Utils/handlers.utils")
 
-
-
-
-const createGameInItem=async(req,res,next)=>{
+const createGameInItem = async (req, res, next) => {
     try {
-        if(!req.file){
-            handleError(res,400,null,"No file Selected")
+        if (!req.file) {
+            handleError(res, 400, null, "No file Selected")
         }
-        const uploadedImage=await new Promise((resolve,reject) => {
-            cloudinary.uploader.upload_stream({folder:"games"},(error,result)=>{
-                if(error)  reject(error);
-                    else resolve(result);
+        const uploadedImage = await new Promise((resolve, reject) => {
+            cloudinary.uploader.upload_stream({ folder: "games" }, (error, result) => {
+                if (error) reject(error);
+                else resolve(result);
             }).end(req.file.buffer);
 
         })
-        const game=new Game({
-            name:req.body.name,
-            imageUrls:[uploadedImage.secure_url],
-            parentCategoryId:req.body.parentCategoryId
+        const game = new Game({
+            name: req.body.name,
+            imageUrls: [uploadedImage.secure_url],
+            parentCategoryId: req.body.parentCategoryId
         });
-        
+
         await game.save()
-        
-         res.status(201).json({message:"Game created Successfully",game})
+        await parentCategory.findByIdAndUpdate(
+            req.body.parentCategoryId,
+            { $push: { games: game._id } }
+        );
+        res.status(201).json({ message: "Game created Successfully", game })
     } catch (error) {
-        if(error.code===11000){
-            handleError(res,400,null,"This Game Already Exists in this Category")
+        if (error.code === 11000) {
+            handleError(res, 400, null, "This Game Already Exists in this Category")
         }
-        else{
+        else {
             next(error);
         }
     }
 }
 
+const getAllGame = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const game = await Game.find({ parentCategoryId: id });
+        okResponse(res, 200, game, "All games fetch Successsfully");
+    } catch (error) {
+        next(error);
+    }
+};
 
 
-module.exports={createGameInItem}
+
+module.exports = { createGameInItem, getAllGame }
