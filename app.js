@@ -14,6 +14,10 @@ app.use(cors({
 }));
 
 app.options('*', cors());
+
+app.get("/api/v1/health-check", (req, res, next) => {
+  return res.status(200).json({ success: true, data: null, message: "Server is running" });
+});
 app.use("/api/v1", rootRouter);
 app.use(globalErrorMiddleware)
 module.exports = app;
