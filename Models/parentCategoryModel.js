@@ -5,15 +5,23 @@ const parentCategorySchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
-      unique:true
+      unique: true
     },
-    games:[
+    games: [
       {
-        type:mongoose.Schema.Types.ObjectId,
-        required:true,
-        ref:"Game"
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "Game"
       }
-    ]
+    ],
+    listings:
+      [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          ref: "Listing"
+        }
+      ],
   },
   {
     timestamps: true,

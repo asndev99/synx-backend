@@ -24,7 +24,7 @@ const verifyAdmin = async (req, res, next) => {
     } catch (error) {
         if (error instanceof jwt.JsonWebTokenError) {
             console.error("JWT Error:", error.message);
-            throw new UnauthorizedError("Invalid token, please login again");
+            next("Please login again");
         } else {
             console.error("Error in verifying token", error);
         }

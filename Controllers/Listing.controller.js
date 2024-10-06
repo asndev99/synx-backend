@@ -6,7 +6,7 @@ const { okResponse } = require("../Utils/handlers.utils");
 
 const addListing = async (req, res, next) => {
   try {
-    const { title, description, price, deliveryTime, gameId } = req.body;
+    const { title, description, price, deliveryTime, gameId,parentCategoryId } = req.body;
 
     let newListing = await listing.create({
       title,
@@ -18,6 +18,7 @@ const addListing = async (req, res, next) => {
 
     const newlisting = await newListing.save();
     await Game.findByIdAndUpdate(gameId, { $push: { listings: newlisting._id } });
+    await parentCategory.findByIdAndUpdate(parentCategoryId,{$push:{listings:newlisting._id}});
     okResponse(res, 200, newListing, "listing  Added Successfull");
   } catch (error) {
     if (error.code == 11000) {
