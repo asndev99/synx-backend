@@ -2,7 +2,7 @@ const { BadRequestError } = require("../customErrors");
 const Game = require("../Models/gamesModel");
 const listing = require("../Models/ListingModel");
 const parentCategory = require("../Models/parentCategoryModel");
-const { okResponse } = require("../Utils/handlers.utils");
+const { okResponse, handleError } = require("../Utils/handlers.utils");
 
 const addListing = async (req, res, next) => {
   try {
@@ -61,4 +61,18 @@ const getAllCategories = async (req, res, next) => {
 }
 
 
-module.exports = { addListing, getAllListing, getAllCategories };
+const deleteList=async(req,res,next)=>{
+  try {
+    const id=req.params.id
+    let deletelist=await listing.findByIdAndDelete(id)
+    if(!deletelist){
+      handleError(res,400,null,"Id is not Found")
+  }
+  okResponse(res, 200, deletelist, "")
+  } catch (error) {
+    console.log("Error in delete list");
+    next(error)
+  }
+}
+
+module.exports = { addListing, getAllListing, getAllCategories ,deleteList};
