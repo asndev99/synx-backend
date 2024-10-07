@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start":"node server.js",
     "start:dev": "set NODE_ENV=dev && nodemon server.js",
     "start:prod": "set NODE_ENV=production && node server.js"
   },
